@@ -21,7 +21,7 @@ Returns an HTMLCollection that updates automatically if the DOM changes.
 
 const buttons = document.getElementsByClassName("btn");
 
-⚠️ Live collections can be tricky because adding/removing elements affects the collection immediately.
+Live collections can be tricky because adding/removing elements affects the collection immediately.
 
 c. querySelector / querySelectorAll
 

@@ -51,7 +51,11 @@ function btnClick(id) {
 }
 
 document.addEventListener("click", (event) => {
+
   if (event.target.classList.contains("interviewBtn")) {
+    if (event.target.closest(".deleteBtn")) {
+      
+    }
     const card = event.target.closest(".shadow-md");
 
      let jobTitle = card.querySelector("h2").innerText;
@@ -60,7 +64,7 @@ document.addEventListener("click", (event) => {
       let jobsDetails = card.querySelector("#jobsDetails").innerText;
        
 
-
+      card.remove()
       
      
 
