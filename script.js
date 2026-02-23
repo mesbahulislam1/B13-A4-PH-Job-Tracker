@@ -52,93 +52,79 @@ function btnClick(id) {
 
 document.addEventListener("click", (event) => {
 
-  if (event.target.classList.contains("interviewBtn")) {
-    if (event.target.closest(".deleteBtn")) {
-      
-    }
+  /* ================= DELETE LOGIC ================= */
+  if (event.target.closest(".deleteBtn")) {
+    event.preventDefault();
+
     const card = event.target.closest(".shadow-md");
+    if (!card) return;
 
-     let jobTitle = card.querySelector("h2").innerText;
-      let jobCatagory = card.querySelector("h3").innerText;
-      let jobSalary = card.querySelector("#jobSalary").innerText;
-      let jobsDetails = card.querySelector("#jobsDetails").innerText;
-       
+    const jobTitle = card.querySelector("h2").innerText;
 
-      card.remove()
-      
-     
-
-    const cardInfo = {
-      jobTitle,
-      jobCatagory,
-      jobSalary,
-      jobsDetails
-    };
-
-
-    const isExists = interViewList.find(
-      (item) => item.jobTitle === cardInfo.jobTitle,
+    // Remove from lists
+    interViewList = interViewList.filter(
+      item => item.jobTitle !== jobTitle
     );
-
-    if (!isExists) {
-      interViewList.push(cardInfo);
-    }
 
     rejectList = rejectList.filter(
-      (item) => item.jobTitle !== cardInfo.jobTitle,
+      item => item.jobTitle !== jobTitle
     );
 
+    // Remove card from UI
+    card.remove();
+
+    // Re-render active filter
     if (currentStatus === "interviewBtn") {
       renderInterview();
     } else if (currentStatus === "rejectedBtn") {
       renderReject();
     }
 
-    if (currentStatus === "interviewBtn") {
-      allCardSection.classList.add("hidden");
-      filterSection.classList.remove("hidden");
-      interViewList.length === 0
-        ? toggleImageList(interViewList)
-        : renderInterview();
-    }
     calculateCount();
-  } else if (event.target.classList.contains("rejectedBtn")) {
+    return;
+  }
+
+  /* ================= INTERVIEW BUTTON ================= */
+  if (event.target.classList.contains("interviewBtn")) {
     const card = event.target.closest(".shadow-md");
 
-      let jobTitle = card.querySelector("h2").innerText;
-      let jobCatagory = card.querySelector("h3").innerText;
-      let jobSalary = card.querySelector("#jobSalary").innerText;
-      let jobsDetails = card.querySelector("#jobsDetails").innerText;
-      
-
-      
     const cardInfo = {
-      jobTitle,
-      jobCatagory,
-      jobSalary,
-      status,
-      jobsDetails
+      jobTitle: card.querySelector("h2").innerText,
+      jobCatagory: card.querySelector("h3").innerText,
+      jobSalary: card.querySelector("#jobSalary").innerText,
+      jobsDetails: card.querySelector("#jobsDetails").innerText,
     };
 
+    if (!interViewList.find(item => item.jobTitle === cardInfo.jobTitle)) {
+      interViewList.push(cardInfo);
+    }
 
-    console.log(cardInfo);
-    const palantExits = rejectList.find(
-      (item) => item.jobTitle === cardInfo.jobTitle,
+    rejectList = rejectList.filter(
+      item => item.jobTitle !== cardInfo.jobTitle
     );
 
-    if (!palantExits) {
+    calculateCount();
+    return;
+  }
+
+  /* ================= REJECT BUTTON ================= */
+  if (event.target.classList.contains("rejectedBtn")) {
+    const card = event.target.closest(".shadow-md");
+
+    const cardInfo = {
+      jobTitle: card.querySelector("h2").innerText,
+      jobCatagory: card.querySelector("h3").innerText,
+      jobSalary: card.querySelector("#jobSalary").innerText,
+      jobsDetails: card.querySelector("#jobsDetails").innerText,
+    };
+
+    if (!rejectList.find(item => item.jobTitle === cardInfo.jobTitle)) {
       rejectList.push(cardInfo);
     }
 
     interViewList = interViewList.filter(
-      (item) => item.jobTitle !== cardInfo.jobTitle,
+      item => item.jobTitle !== cardInfo.jobTitle
     );
-
-    if (currentStatus === "rejectedBtn") {
-      renderReject();
-    } else if (currentStatus === "interviewBtn") {
-      renderInterview();
-    }
 
     calculateCount();
   }
