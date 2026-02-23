@@ -113,17 +113,21 @@ list.appendChild(newItem);
 
 ### 5. What is the difference between preventDefault() and stopPropagation() methods?
 
----
+event.preventDefault()
+What it does
 
-**Technology Stack:**
+Stops the default browser behavior of an element.
+Does NOT stop
+Event bubbling
+Event capturing
+Common Use Cases
+Prevent form submission
+Prevent link navigation
+Prevent page reload
+Disable right-click menu
+Example
+document.querySelector("a").addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("Link click handled without navigation");
+});
 
-- HTML
-- CSS (Vanilla/Tailwind/DaisyUI)
-- JavaScript (Vanilla)
-
----
-
-## What to submit:
-
-1. GitHub Repository Link:
-2. Live Site Link:
