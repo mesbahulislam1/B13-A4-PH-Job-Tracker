@@ -15,8 +15,6 @@ const allCardSection = document.getElementById("allCard");
 const mainContainer = document.querySelector("#main");
 const filterSection = document.getElementById("filterSection");
 
-
-
 function calculateCount() {
   total.innerText = allCardSection.children.length;
   jobsCount.innerText = allCardSection.children.length;
@@ -42,7 +40,6 @@ function btnClick(id) {
   } else if (id == "allBtn") {
     allCardSection.classList.remove("hidden");
     filterSection.classList.add("hidden");
-    
   } else if (id == "rejectedBtn") {
     allCardSection.classList.add("hidden");
     filterSection.classList.remove("hidden");
@@ -51,8 +48,7 @@ function btnClick(id) {
 }
 
 document.addEventListener("click", (event) => {
-
-  /* ================= DELETE LOGIC ================= */
+  
   if (event.target.closest(".deleteBtn")) {
     event.preventDefault();
 
@@ -61,19 +57,15 @@ document.addEventListener("click", (event) => {
 
     const jobTitle = card.querySelector("h2").innerText;
 
-    // Remove from lists
-    interViewList = interViewList.filter(
-      item => item.jobTitle !== jobTitle
-    );
 
-    rejectList = rejectList.filter(
-      item => item.jobTitle !== jobTitle
-    );
+    interViewList = interViewList.filter((item) => item.jobTitle !== jobTitle);
 
-    // Remove card from UI
+    rejectList = rejectList.filter((item) => item.jobTitle !== jobTitle);
+
+
     card.remove();
 
-    // Re-render active filter
+
     if (currentStatus === "interviewBtn") {
       renderInterview();
     } else if (currentStatus === "rejectedBtn") {
@@ -84,32 +76,69 @@ document.addEventListener("click", (event) => {
     return;
   }
 
-  /* ================= INTERVIEW BUTTON ================= */
+
   if (event.target.classList.contains("interviewBtn")) {
     const card = event.target.closest(".shadow-md");
 
+    card.classList.add("border-l-5", "border-green-500");
+
+    const statusEl = card.querySelector(".uppercase");
+
+
+    statusEl.innerText = "Interview";
+
+    statusEl.classList.remove(
+      "bg-red-400/20",
+      "text-red-700",
+      "border-red-500",
+    );
+
+    statusEl.classList.add(
+      "bg-green-400/10",
+      "text-green-500",
+      "border-green-500",
+    );
+
     const cardInfo = {
       jobTitle: card.querySelector("h2").innerText,
       jobCatagory: card.querySelector("h3").innerText,
       jobSalary: card.querySelector("#jobSalary").innerText,
       jobsDetails: card.querySelector("#jobsDetails").innerText,
+      status: "Interview",
     };
 
-    if (!interViewList.find(item => item.jobTitle === cardInfo.jobTitle)) {
+    // 👉 Interview list-এ add
+    if (!interViewList.find((item) => item.jobTitle === cardInfo.jobTitle)) {
       interViewList.push(cardInfo);
     }
 
+    // 👉 Reject list থেকে remove
     rejectList = rejectList.filter(
-      item => item.jobTitle !== cardInfo.jobTitle
+      (item) => item.jobTitle !== cardInfo.jobTitle,
     );
 
-    calculateCount();
-    return;
-  }
+    // 👉 re-render
+    if (currentStatus === "interviewBtn") {
+      renderInterview();
+    } else if (currentStatus === "rejectedBtn") {
+      renderReject();
+    }
 
-  /* ================= REJECT BUTTON ================= */
+    calculateCount();
+  }
   if (event.target.classList.contains("rejectedBtn")) {
     const card = event.target.closest(".shadow-md");
+    card.classList.add("border-l-5", "border-red-500");
+
+    const statusEl = card.querySelector(".uppercase");
+    statusEl.innerText = "Rejected";
+    statusEl.classList.remove(
+      "bg-green-400/10",
+      "text-green-500",
+      "border-green-500",
+    );
+
+    statusEl.classList.add("bg-red-400/20", "text-red-700", "border-red-500");
 
     const cardInfo = {
       jobTitle: card.querySelector("h2").innerText,
@@ -118,18 +147,24 @@ document.addEventListener("click", (event) => {
       jobsDetails: card.querySelector("#jobsDetails").innerText,
     };
 
-    if (!rejectList.find(item => item.jobTitle === cardInfo.jobTitle)) {
+    if (!rejectList.find((item) => item.jobTitle === cardInfo.jobTitle)) {
       rejectList.push(cardInfo);
     }
 
     interViewList = interViewList.filter(
-      item => item.jobTitle !== cardInfo.jobTitle
+      (item) => item.jobTitle !== cardInfo.jobTitle,
     );
+
+    if (currentStatus === "rejectedBtn") {
+      renderReject();
+    } else if (currentStatus === "interviewBtn") {
+      
+      renderInterview();
+    }
 
     calculateCount();
   }
 });
-
 function toggleImageList(list) {
   if (list.length === 0) {
     filterSection.classList.remove("hidden");
@@ -151,6 +186,7 @@ function renderInterview() {
     return;
   }
   for (let inte of interViewList) {
+    const btnText = "Interview";
     let div = document.createElement("div");
     div.innerHTML = `
     <div
@@ -170,9 +206,9 @@ function renderInterview() {
           </div>
           
           <button
-            class=" py-2 px-4 text-[#002C5C] uppercase font-medium"
+            class=" py-2 px-4 uppercase font-medium bg-green-400/10 border border-green-500 text-green-500 rounded-md"
           >
-            Not Applied
+            ${btnText}
           </button>
 
           <p id="jobsDetails" class="text-[#323B49]">
@@ -197,13 +233,14 @@ function renderReject() {
     return;
   }
   for (let inte of rejectList) {
+    const btnText = "Rejected";
     let div = document.createElement("div");
     div.innerHTML = `
     <div
-          class="job-card border-red-400 border-l-5 shadow-md my-5 p-7 rounded-md space-y-2"
+          class="job-card border-red-500 border-l-5 shadow-md my-5 p-7 rounded-md space-y-2"
         >
           <h2 class="text-[18px] text-[#002C5C] font-semibold">
-            Mobile First Corp
+            ${inte.jobTitle}
           </h2>
           <div class="flex items-center justify-between">
             <div>
@@ -217,9 +254,9 @@ function renderReject() {
 
           
           <button
-            class="bg-[#EEF4FF] py-2 px-4 text-[#002C5C] uppercase font-medium"
+            class=" py-2 px-4 text-[#002C5C] uppercase font-medium bg-red-400/20 text-red-700 border rounded-md"
           >
-            Not Applied
+            ${btnText}
           </button>
           <p id="jobsDetails" class="text-[#323B49]">
             Build cross-platform mobile applications using React Native. Work on
