@@ -1,83 +1,129 @@
-## Welcome To ( সহজ সরল সিম্পল ) Assignment - 4 
-
-
----
-# 📅 Deadline For 60 marks: 23th February, 2026 (11:59 pm ⏱️)
-# 📅 Deadline For 50 marks: 24th February, 2026 (11:59 pm ⏱️)
-# 📅 Deadline For 30 marks: Any time after 24th February.
-
-
-# Main Requirements
-
-## Design Part
-
-## Dashboard
-- Website name and Create a dashboard like figma 
-- The section should be responsive for mobile devices. It is totally up to you. 
-
-## Available Jobs Section
-- A title on the left side, jobs count on the right side 
-- 3 different tab  below the section title 
-- Minimum 8 cards with:
-	- companyName
-	- position
-	- location
-	- type
-	- salary
-	- description
-	- 2 buttons: Interview, Rejected
-- By default all the jobs data will show on All tab, and the Interview, Rejected tab will show “No jobs Available” message with a subtitle below and an icon/image on the above
-
-- The section should be responsive for mobile devices. It is totally up to you.
-
---- 
-
-## Functionalities Part
-- Clicking on Interview button on the card 
-    - will add the data on Interview tab 
-    - add the status as Interview.
-    - Will increase the the count of interview in Dashboard 
-
-- Clicking on Rejected button on the card 
-    - will add the data on Rejected tab 
-    - add the status as Rejected.
-    - Will increase the the count of Rejected in Dashboard
-
-- Enable toggle between Interview and rejected button(you can select Rejected button after clicking on Interview, and Interview button after clicking on Rejected button). It will change the tab and dashboard count also. It will show tab wise jobs count on the right.
-
----
-
-# Challenges Requirements
-- Clicking on the delete button will remove that card from the UI, and the count will be deducted from the dashboard card and the main section.
-- No lorem ipsum text on your website. At least 8 meaningful commits in your project.  
-
-- Create a readme file and answer this question on your own. Don’t copy-paste from Google or any AI chatbot. 
-
 
 ## Answers to Questions
 
 ### 1. What is the difference between getElementById, getElementsByClassName, and querySelector / querySelectorAll?
 
+a. getElementById
+
+Use this when you know the unique ID of an element.
+
+Returns a single element (or null if not found).
+
+Fastest method because IDs are unique in the DOM.
+
+const header = document.getElementById("mainHeader");
+
+b. getElementsByClassName
+
+Use this when you want a live collection of all elements with a specific class.
+
+Returns an HTMLCollection that updates automatically if the DOM changes.
+
+const buttons = document.getElementsByClassName("btn");
+
+⚠️ Live collections can be tricky because adding/removing elements affects the collection immediately.
+
+c. querySelector / querySelectorAll
+
+Use these for CSS-style selectors or complex selectors (combinations of classes, IDs, pseudo-classes, etc.).
+
+const firstButton = document.querySelector(".btn.primary");
+const allButtons = document.querySelectorAll(".btn.primary");
+
+d. querySelectorAll for a static list
+
+Returns a NodeList that does not update automatically when the DOM changes.
+
+Useful when you want a snapshot of elements at a moment in time.
+
+const cards = document.querySelectorAll(".card"); // static list
+
+Rule of thumb:
+Unique ID → getElementById
+One class, live updates → getElementsByClassName
+Complex selectors or static lists → querySelector / querySelectorAll
+
+
 ### 2. How do you create and insert a new element into the DOM?
+const newDiv = document.createElement("div");
+newDiv.textContent = "Hello";
+newDiv.id = "myDiv";
+newDiv.className = "box";
+
+a. Append as the last child
+const container = document.getElementById("container");
+container.appendChild(newDiv); 
+b. Insert before a specific element
+const referenceNode = document.getElementById("firstItem");
+container.insertBefore(newDiv, referenceNode);
+c. Using modern methods (append, prepend)
+container.append(newDiv); 
+container.prepend(newDiv); 
+
+append and prepend can also accept text nodes or multiple elements.
+Optional: Create text nodes separately
+Instead of textContent, you can create a text node:
+
+const text = document.createTextNode("Hello");
+newDiv.appendChild(text);
+
+createElement → makes the element (not yet in DOM)
+appendChild, insertBefore, append, prepend → place it into the DOM
+textContent or innerHTML → add content
+
 
 ### 3. What is Event Bubbling? And how does it work?
+Event occurs on a target element (child element).
+Browser checks if the target has an event listener → executes it.
+Moves up the DOM tree (parent → grandparent → … → document → window).
+Executes any matching event listeners on the ancestors.
+
 
 ### 4. What is Event Delegation in JavaScript? Why is it useful?
+
+
+<ul id="todoList">
+  <li>Learn JS</li>
+  <li>Practice DOM</li>
+  <li>Build Projects</li>
+</ul>
+
+Instead of adding a click listener to each <li>, we do:
+const list = document.getElementById("todoList");
+
+list.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    console.log("You clicked:", event.target.textContent);
+  }
+});
+
+
+Clicking an <li> triggers a click event.
+The event bubbles up to the <ul>, which has the listener.
+Inside the handler, event.target tells you which child element was actually clicked.
+Why Event Delegation is Useful
+Fewer Event Listeners → Better performance
+Instead of 100 <li> elements each having a listener, one listener on the parent handles all clicks.
+Handles Dynamic Elements
+If you add new <li> items later, you don’t need to attach new listeners.
+const newItem = document.createElement("li");
+newItem.textContent = "New Task";
+list.appendChild(newItem); 
+
 
 ### 5. What is the difference between preventDefault() and stopPropagation() methods?
 
 ---
 
-
 **Technology Stack:**
+
 - HTML
 - CSS (Vanilla/Tailwind/DaisyUI)
 - JavaScript (Vanilla)
 
+---
 
---- 
+## What to submit:
 
-## What to submit: 
-
-1. GitHub Repository Link: 
-2. Live Site Link: 
+1. GitHub Repository Link:
+2. Live Site Link:
